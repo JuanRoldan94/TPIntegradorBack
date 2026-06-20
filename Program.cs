@@ -1,3 +1,6 @@
+using Microsoft.EntityFrameworkCore;
+using TPIntegradorBack.Data;
+
 namespace TPIntegradorBack
 {
     public class Program
@@ -6,6 +9,8 @@ namespace TPIntegradorBack
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddDbContext<Data.ApplicationDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
