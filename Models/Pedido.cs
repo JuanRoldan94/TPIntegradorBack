@@ -11,6 +11,7 @@ namespace TPIntegradorBack.Models
         public Cliente Cliente { get; set; }
         public Usuario Usuario { get; set; }
 
+        public ICollection<DetallePedido> DetallePedido { get; set; }
         public Pedido() { }
     }
 }
