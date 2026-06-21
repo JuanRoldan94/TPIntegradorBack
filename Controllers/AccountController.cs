@@ -1,6 +1,8 @@
-﻿namespace TPIntegradorBack.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+
+public class AccountController : Controller
 {
-    public class AccountController
-    {
-    }
+
 }
+
