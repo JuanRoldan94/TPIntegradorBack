@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Reflection.Metadata.Ecma335;
 using TPIntegradorBack.Models;
 
 namespace TPIntegradorBack.Controllers
@@ -11,7 +12,7 @@ namespace TPIntegradorBack.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AcercaDe()
         {
             return View();
         }
