@@ -24,11 +24,11 @@ namespace TPIntegradorBack.Migrations
 
             modelBuilder.Entity("TPIntegradorBack.Models.Cliente", b =>
                 {
-                    b.Property<int>("ClienteID")
+                    b.Property<int>("ClienteId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClienteID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClienteId"));
 
                     b.Property<bool>("Activo")
                         .HasColumnType("bit");
@@ -43,7 +43,7 @@ namespace TPIntegradorBack.Migrations
                     b.Property<int>("Telefono")
                         .HasColumnType("int");
 
-                    b.HasKey("ClienteID");
+                    b.HasKey("ClienteId");
 
                     b.ToTable("Clientes");
                 });
@@ -56,14 +56,11 @@ namespace TPIntegradorBack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetallePedidoId"));
 
+                    b.Property<int>("Cantidad")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("CostoUnitarioHistorico")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("IdPedido")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdProducto")
-                        .HasColumnType("int");
 
                     b.Property<int>("PedidoId")
                         .HasColumnType("int");
@@ -73,9 +70,6 @@ namespace TPIntegradorBack.Migrations
 
                     b.Property<decimal>("Subtotal")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("cantidad")
-                        .HasColumnType("int");
 
                     b.HasKey("DetallePedidoId");
 
@@ -98,7 +92,7 @@ namespace TPIntegradorBack.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ClienteID")
+                    b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Localidad")
@@ -110,7 +104,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("DireccionId");
 
-                    b.HasIndex("ClienteID");
+                    b.HasIndex("ClienteId");
 
                     b.ToTable("Direcciones");
                 });
@@ -123,7 +117,7 @@ namespace TPIntegradorBack.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PedidoId"));
 
-                    b.Property<int>("ClienteID")
+                    b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<bool>("Confirmado")
@@ -135,14 +129,14 @@ namespace TPIntegradorBack.Migrations
                     b.Property<decimal>("MontoTotal")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UsuarioID")
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("PedidoId");
 
-                    b.HasIndex("ClienteID");
+                    b.HasIndex("ClienteId");
 
-                    b.HasIndex("UsuarioID");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Pedidos");
                 });
@@ -172,11 +166,11 @@ namespace TPIntegradorBack.Migrations
 
             modelBuilder.Entity("TPIntegradorBack.Models.Usuario", b =>
                 {
-                    b.Property<int>("UsuarioID")
+                    b.Property<int>("UsuarioId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UsuarioId"));
 
                     b.Property<string>("Apellido")
                         .IsRequired()
@@ -197,7 +191,7 @@ namespace TPIntegradorBack.Migrations
                     b.Property<bool>("Role")
                         .HasColumnType("bit");
 
-                    b.HasKey("UsuarioID");
+                    b.HasKey("UsuarioId");
 
                     b.ToTable("Usuarios");
                 });
@@ -225,7 +219,7 @@ namespace TPIntegradorBack.Migrations
                 {
                     b.HasOne("TPIntegradorBack.Models.Cliente", "Cliente")
                         .WithMany("Direcciones")
-                        .HasForeignKey("ClienteID")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -236,13 +230,13 @@ namespace TPIntegradorBack.Migrations
                 {
                     b.HasOne("TPIntegradorBack.Models.Cliente", "Cliente")
                         .WithMany("Pedidos")
-                        .HasForeignKey("ClienteID")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TPIntegradorBack.Models.Usuario", "Usuario")
                         .WithMany("Pedidos")
-                        .HasForeignKey("UsuarioID")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

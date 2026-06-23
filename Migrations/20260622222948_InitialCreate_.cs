@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace TPIntegradorBack.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InitialCreate_ : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,7 +15,7 @@ namespace TPIntegradorBack.Migrations
                 name: "Clientes",
                 columns: table => new
                 {
-                    ClienteID = table.Column<int>(type: "int", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RazonSocial = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DNI = table.Column<int>(type: "int", nullable: false),
@@ -24,7 +24,7 @@ namespace TPIntegradorBack.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Clientes", x => x.ClienteID);
+                    table.PrimaryKey("PK_Clientes", x => x.ClienteId);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,7 +46,7 @@ namespace TPIntegradorBack.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    UsuarioID = table.Column<int>(type: "int", nullable: false)
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     NombreUsuario = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Contrasenia = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -56,7 +56,7 @@ namespace TPIntegradorBack.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Usuarios", x => x.UsuarioID);
+                    table.PrimaryKey("PK_Usuarios", x => x.UsuarioId);
                 });
 
             migrationBuilder.CreateTable(
@@ -68,16 +68,16 @@ namespace TPIntegradorBack.Migrations
                     Calle = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Numero = table.Column<int>(type: "int", nullable: false),
                     Localidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClienteID = table.Column<int>(type: "int", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Direcciones", x => x.DireccionId);
                     table.ForeignKey(
-                        name: "FK_Direcciones_Clientes_ClienteID",
-                        column: x => x.ClienteID,
+                        name: "FK_Direcciones_Clientes_ClienteId",
+                        column: x => x.ClienteId,
                         principalTable: "Clientes",
-                        principalColumn: "ClienteID",
+                        principalColumn: "ClienteId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -90,23 +90,23 @@ namespace TPIntegradorBack.Migrations
                     Fecha = table.Column<DateTime>(type: "datetime2", nullable: false),
                     MontoTotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Confirmado = table.Column<bool>(type: "bit", nullable: false),
-                    ClienteID = table.Column<int>(type: "int", nullable: false),
-                    UsuarioID = table.Column<int>(type: "int", nullable: false)
+                    ClienteId = table.Column<int>(type: "int", nullable: false),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Pedidos", x => x.PedidoId);
                     table.ForeignKey(
-                        name: "FK_Pedidos_Clientes_ClienteID",
-                        column: x => x.ClienteID,
+                        name: "FK_Pedidos_Clientes_ClienteId",
+                        column: x => x.ClienteId,
                         principalTable: "Clientes",
-                        principalColumn: "ClienteID",
+                        principalColumn: "ClienteId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Pedidos_Usuarios_UsuarioID",
-                        column: x => x.UsuarioID,
+                        name: "FK_Pedidos_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
                         principalTable: "Usuarios",
-                        principalColumn: "UsuarioID",
+                        principalColumn: "UsuarioId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -116,13 +116,11 @@ namespace TPIntegradorBack.Migrations
                 {
                     DetallePedidoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IdPedido = table.Column<int>(type: "int", nullable: false),
-                    IdProducto = table.Column<int>(type: "int", nullable: false),
-                    cantidad = table.Column<int>(type: "int", nullable: false),
-                    CostoUnitarioHistorico = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PedidoId = table.Column<int>(type: "int", nullable: false),
-                    ProductoId = table.Column<int>(type: "int", nullable: false)
+                    ProductoId = table.Column<int>(type: "int", nullable: false),
+                    Cantidad = table.Column<int>(type: "int", nullable: false),
+                    CostoUnitarioHistorico = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Subtotal = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -152,19 +150,19 @@ namespace TPIntegradorBack.Migrations
                 column: "ProductoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Direcciones_ClienteID",
+                name: "IX_Direcciones_ClienteId",
                 table: "Direcciones",
-                column: "ClienteID");
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pedidos_ClienteID",
+                name: "IX_Pedidos_ClienteId",
                 table: "Pedidos",
-                column: "ClienteID");
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Pedidos_UsuarioID",
+                name: "IX_Pedidos_UsuarioId",
                 table: "Pedidos",
-                column: "UsuarioID");
+                column: "UsuarioId");
         }
 
         /// <inheritdoc />
