@@ -4,13 +4,14 @@
     {
         public int ClienteId { get; set; }
         public string RazonSocial { get; set; }
-        public int DNI { get; set; }
-        public int Telefono { get; set; }
+        public string DNI { get; set; }
+        public string Telefono { get; set; }
         public bool Activo { get; set; } = false;
-
         public ICollection<Direccion>? Direcciones { get; set; }
         public ICollection<Pedido>? Pedidos { get; set; }
 
+        //Coneccion del cliente con su cuenta
+        public string? IdentityUserId { get; set; }
         public Cliente() { }
     }
 }
