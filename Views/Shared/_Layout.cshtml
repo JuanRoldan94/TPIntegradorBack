@@ -42,8 +42,14 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+			@RenderBody()
+			@if(Context.Session.GetString("Nombre") != null)
+			{
+			<span>
+				Bienvenido @Context.Session.GetString("Nombre")
+			</span>
+			}
+		</main>
     </div>
 
     <footer class="border-top footer text-muted">
