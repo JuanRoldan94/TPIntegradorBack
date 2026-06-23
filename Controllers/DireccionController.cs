@@ -1,14 +1,16 @@
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TPIntegradorBack.Models;
+using System.Security.Claims;
 using TPIntegradorBack.Data;
+using TPIntegradorBack.Models;
 
-public class DireccionsController : Controller
+public class DireccionController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public DireccionsController(ApplicationDbContext context)
+    public DireccionController(ApplicationDbContext context)
     {
         _context = context;
     }
@@ -48,8 +50,20 @@ public class DireccionsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("DireccionId,Calle,Numero,Localidad,Cliente")] Direccion direccion)
+    public async Task<IActionResult> Create([Bind("DireccionId,Calle,Numero,Localidad")] Direccion direccion)
     {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.IdentityUserId == userId);
+        if (cliente == null)
+        {
+            ModelState.AddModelError("", "No se encontro un perfil de cliente para tu usuario actual.");
+            return View(direccion);
+        }
+
+        direccion.ClienteId = cliente.ClienteId;
+        ModelState.Remove("Cliente");
+        ModelState.Remove("ClienteId");
+        
         if (ModelState.IsValid)
         {
             _context.Add(direccion);
@@ -80,7 +94,7 @@ public class DireccionsController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int? direccionid, [Bind("DireccionId,Calle,Numero,Localidad,Cliente")] Direccion direccion)
+    public async Task<IActionResult> Edit(int? direccionid, [Bind("DireccionId,Calle,Numero,Localidad")] Direccion direccion)
     {
         if (direccionid != direccion.DireccionId)
         {

@@ -4,12 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 
-
-public class ClientesController : Controller
+public class ClienteController : Controller
 {
     private readonly ApplicationDbContext _context;
 
-    public ClientesController(ApplicationDbContext context)
+    public ClienteController(ApplicationDbContext context)
     {
         _context = context;
     }

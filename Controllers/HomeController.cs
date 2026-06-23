@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Reflection.Metadata.Ecma335;
 using TPIntegradorBack.Models;
 
 namespace TPIntegradorBack.Controllers
