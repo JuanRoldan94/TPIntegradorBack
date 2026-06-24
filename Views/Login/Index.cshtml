@@ -4,21 +4,93 @@
     Layout = null;
 }
 
-<h2>Login</h2>
+<style>
+    .contenedor-login {
+        display: flex;
+        flex-direction: column;
+        width: 425px;
+        background-color: white;
+        box-shadow: 0px 4px 10px rgba(0,0,0,.1);
+        border-radius: 20px;
+    }
 
-<form asp-action="Index" method="post">
+    .title-login {
+        border-radius: 20px 20px 0 0;
+        padding: 15px;
+        color: white;
+    }
 
-    <input asp-for="NombreUsuario" placeholder="Usuario" />
-    <br>
+    .formulario-login {
+        padding: 20px;
+    }
 
-    <input asp-for="Contrasenia" type="password" placeholder="Contraseña" />
-    <br>
+    .pie-formulario {
+        background-color: #393939;
+        padding: 20px;
+        border-radius: 0 0 20px 20px;
+    }
 
-    <button type="submit">Ingresar</button>
+    body {
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f4f6f9;
+    }
+</style>
 
-</form>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
-@if (ViewBag.Error != null)
-{
-    <p style="color:red">@ViewBag.Error</p>
-}
+<div class="contenedor-login">
+
+    <div class="title-login bg-success text-center">
+        <h1>Iniciar Sesión</h1>
+    </div>
+
+    <div class="formulario-login">
+
+        <form asp-action="Index" method="post">
+
+            <input class="form-control mb-3"
+                   asp-for="NombreUsuario"
+                   placeholder="Nombre de Usuario" />
+
+            <input class="form-control mb-3"
+                   asp-for="Contrasenia"
+                   type="password"
+                   placeholder="Contraseña" />
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger mb-3">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <button class="btn btn-success w-100 mb-3" type="submit">
+                Ingresar
+            </button>
+
+        </form>
+
+    </div>
+
+    <div class="pie-formulario text-light">
+        <h3 class="text-center mb-4">Trabajo Práctico Integrador</h3>
+
+        <div><strong>Materia:</strong> Programación III</div>
+        <div><strong>Profesor:</strong> Ing. Alejandro Tassoni</div>
+
+        <div>
+            <strong>Integrantes:</strong>
+            <ul>
+                <li>Roldán Juan Manuel</li>
+                <li>Zenklusen Juan Ignacio</li>
+                <li>Santos Said</li>
+            </ul>
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
