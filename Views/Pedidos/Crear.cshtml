@@ -9,7 +9,7 @@
     <div class="row mb-3">
         <div class="col-md-6">
             <label class="form-label fw-bold">1. Seleccionar Cliente</label>
-            <select id="selectCliente" class="form-select">
+            <select id="selectCliente" class="form-select" asp-items="ViewBag.Clientes">
                 <option value="">-- Seleccione un cliente --</option>
             </select>
         </div>
@@ -64,6 +64,7 @@
         let pedidoConfirmado = false;
 
         document.addEventListener('DOMContentLoaded', () => {
+
             const btnAgregar = document.getElementById('btnAgregarProducto');
             const btnConfirmar = document.getElementById('btnConfirmarPedido');
 
@@ -178,6 +179,7 @@
                 return;
             }
 
+            console.log("Puto el que lee");
             // Armar el objeto según el ViewModel 'ConfirmarPedido'
             const datosDelFrente = {
                 ClienteId: parseInt(clienteId),
@@ -227,5 +229,6 @@
             const botonesEliminar = document.querySelectorAll('#cuerpoTabla .btn-danger');
             botonesEliminar.forEach(btn => btn.disabled = true);
         }
+        
     </script>
 }
