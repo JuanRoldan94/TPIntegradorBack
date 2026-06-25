@@ -20,7 +20,9 @@ namespace GestorDespacho.Controllers
         public async Task<IActionResult> Crear()
         {
             var clientes = await _context.Clientes.Where(c => c.Activo).ToListAsync();
-            ViewBag.Clientes = new SelectList(clientes, "Id", "RazonSocial");
+
+            Console.WriteLine(clientes.Count);
+            ViewBag.Clientes = new SelectList(clientes, "ClienteId", "RazonSocial");
             return View();
         }
 
