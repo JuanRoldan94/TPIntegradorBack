@@ -16,7 +16,7 @@ public class ClienteController : Controller
 
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Clientes.ToListAsync());
+        return View(await _context.Clientes.Include(c => c.Direcciones).ToListAsync());
     }
 
     public async Task<IActionResult> Details(int? id)

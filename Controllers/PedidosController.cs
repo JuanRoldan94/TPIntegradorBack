@@ -17,6 +17,32 @@ namespace GestorDespacho.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var pedidos = await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Usuario)
+                .Include(p => p.DetallePedido)
+                .ToListAsync();
+            return View(pedidos);
+        }
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var pedido = await _context.Pedidos
+                .Include(p => p.Cliente)
+                .Include(p => p.Usuario)
+                .Include(p => p.DetallePedido)
+                    .ThenInclude(d => d.Producto)
+                .FirstOrDefaultAsync(p => p.PedidoId == id);
+
+            if (pedido == null) return NotFound();
+
+            return View(pedido);
+        }
+
         public async Task<IActionResult> Crear()
         {
             var clientes = await _context.Clientes.Where(c => c.Activo).ToListAsync();

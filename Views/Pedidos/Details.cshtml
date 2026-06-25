@@ -1,0 +1,96 @@
+@model TPIntegradorBack.Models.Pedido
+
+@{
+    ViewData["Title"] = "Detalle del Pedido";
+}
+
+<div class="container mt-4">
+    <h2>Detalle del Pedido #@Model.PedidoId</h2>
+    <hr />
+
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <p class="mb-1"><strong>Cliente:</strong> @Model.Cliente?.RazonSocial</p>
+            <p class="mb-1"><strong>Usuario:</strong> @Model.Usuario?.NombreUsuario</p>
+        </div>
+        <div class="col-md-4">
+            <p class="mb-1"><strong>Fecha:</strong> @Model.Fecha.ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="mb-1"><strong>Confirmado:</strong> @(Model.Confirmado ? "Sí" : "No")</p>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="tablaDetalles">
+            <thead class="table-dark">
+                <tr>
+                    <th>Cantidad</th>
+                    <th>Descripción</th>
+                    <th>Costo Unitario</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card mt-3 bg-light">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Total de productos:</strong> <span id="lblTotalProductos">0</span></p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h4 class="mb-3">Monto total: $<span id="lblMontoTotal">0.00</span></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const detallesPedido = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            Model.DetallePedido.Select(d => new {
+                productoId = d.ProductoId,
+                descripcion = d.Producto.Descripcion,
+                costoUnitario = d.CostoUnitarioHistorico,
+                cantidad = d.Cantidad,
+                subtotal = d.Subtotal
+            })
+        ));
+
+        document.addEventListener('DOMContentLoaded', () => {
+            actualizarTabla();
+        });
+
+        function actualizarTabla() {
+            const tbody = document.getElementById('cuerpoTabla');
+            tbody.innerHTML = '';
+
+            let totalProductos = 0;
+            let montoTotal = 0;
+
+            detallesPedido.forEach(item => {
+                totalProductos += item.cantidad;
+                montoTotal += item.subtotal;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.cantidad}</td>
+                    <td>${item.descripcion}</td>
+                    <td>$${item.costoUnitario.toFixed(2)}</td>
+                    <td>$${item.subtotal.toFixed(2)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            document.getElementById('lblTotalProductos').innerText = totalProductos;
+            document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
+        }
+    </script>
+}

@@ -40,7 +40,7 @@
                 @Html.DisplayFor(model => item.Localidad)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Cliente)
+                @Html.DisplayFor(model => item.Cliente.RazonSocial)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.DireccionId">Edit</a> |

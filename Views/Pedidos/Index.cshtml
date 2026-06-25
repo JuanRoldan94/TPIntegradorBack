@@ -1,0 +1,40 @@
+@model IEnumerable<TPIntegradorBack.Models.Pedido>
+
+@{
+    ViewData["Title"] = "Pedidos";
+}
+
+<h1>Pedidos</h1>
+
+<p>
+    <a asp-action="Crear">Nuevo Pedido</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+            <th>Usuario</th>
+            <th>Monto Total</th>
+            <th>Productos</th>
+            <th>Confirmado</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Cliente?.RazonSocial</td>
+                <td>@item.Usuario?.NombreUsuario</td>
+                <td>$@item.MontoTotal.ToString("0.00")</td>
+                <td>@item.DetallePedido?.Sum(d => d.Cantidad)</td>
+                <td>@(item.Confirmado ? "Sí" : "No")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.PedidoId">Ver</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
