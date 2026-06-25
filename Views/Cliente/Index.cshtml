@@ -49,7 +49,10 @@
                 @Html.DisplayFor(model => item.Activo)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Direcciones)
+                @if (item.Direcciones != null && item.Direcciones.Any())
+                {
+                    @string.Join(" | ", item.Direcciones.Select(d => $"{d.Calle} {d.Numero}, {d.Localidad}"))
+                }
             </td>
             <td>
                 @Html.DisplayFor(model => item.Pedidos)

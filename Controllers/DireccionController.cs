@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using TPIntegradorBack.Data;
 using TPIntegradorBack.Models;
 
@@ -18,7 +17,7 @@ public class DireccionController : Controller
     // GET: DIRECCIONS
     public async Task<IActionResult> Index()    
     {
-        return View(await _context.Direcciones.ToListAsync());
+        return View(await _context.Direcciones.Include(d => d.Cliente).ToListAsync());
     }
 
     // GET: DIRECCIONS/Details/5
@@ -40,8 +39,10 @@ public class DireccionController : Controller
     }
 
     // GET: DIRECCIONS/Create
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        var clientes = await _context.Clientes.Where(c => c.Activo).ToListAsync();
+        ViewBag.Clientes = new SelectList(clientes, "ClienteId", "RazonSocial");
         return View();
     }
 
@@ -50,26 +51,25 @@ public class DireccionController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("DireccionId,Calle,Numero,Localidad")] Direccion direccion)
+    public async Task<IActionResult> Create([Bind("DireccionId,Calle,Numero,Localidad,ClienteId")] Direccion direccion)
     {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.IdentityUserId == userId);
-        if (cliente == null)
+        ModelState.Remove("Cliente");
+
+        var clienteExiste = await _context.Clientes.AnyAsync(c => c.ClienteId == direccion.ClienteId);
+        if (!clienteExiste)
         {
-            ModelState.AddModelError("", "No se encontro un perfil de cliente para tu usuario actual.");
-            return View(direccion);
+            ModelState.AddModelError("ClienteId", "Debe seleccionar un cliente válido.");
         }
 
-        direccion.ClienteId = cliente.ClienteId;
-        ModelState.Remove("Cliente");
-        ModelState.Remove("ClienteId");
-        
         if (ModelState.IsValid)
         {
             _context.Add(direccion);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+        var clientes = await _context.Clientes.Where(c => c.Activo).ToListAsync();
+        ViewBag.Clientes = new SelectList(clientes, "ClienteId", "RazonSocial");
         return View(direccion);
     }
 
