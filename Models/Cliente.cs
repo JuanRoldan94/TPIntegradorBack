@@ -3,10 +3,10 @@
     public class Cliente
     {
         public int ClienteId { get; set; }
-        public string RazonSocial { get; set; }
-        public string DNI { get; set; }
-        public string Telefono { get; set; }
-        public bool Activo { get; set; } = false;
+        public string? RazonSocial { get; set; }
+        public string? DNI { get; set; }
+        public string? Telefono { get; set; }
+        public bool Activo { get; set; } = true;
         public ICollection<Direccion>? Direcciones { get; set; }
         public ICollection<Pedido>? Pedidos { get; set; }
 

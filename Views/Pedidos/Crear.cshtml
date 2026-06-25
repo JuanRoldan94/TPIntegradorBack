@@ -1,0 +1,231 @@
+﻿@{
+    ViewData["Title"] = "Generar Despacho";
+}
+
+<div class="container mt-4">
+    <h2>Registro de Productos Despachados</h2>
+    <hr />
+
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <label class="form-label fw-bold">1. Seleccionar Cliente</label>
+            <select id="selectCliente" class="form-select">
+                <option value="">-- Seleccione un cliente --</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <label class="form-label fw-bold">2. Cargar Producto (por ID)</label>
+            <div class="input-group">
+                <input type="number" id="inputProductoId" class="form-control" placeholder="Ingrese el id_producto" min="1" />
+                <button class="btn btn-primary" id="btnAgregarProducto" type="button">Agregar Producto</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" id="tablaDetalles">
+            <thead class="table-dark">
+                <tr>
+                    <th>Cantidad</th>
+                    <th>Descripción</th>
+                    <th>Costo Unitario</th>
+                    <th>Subtotal</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="cuerpoTabla">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card mt-3 bg-light">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-1"><strong>Usuario que realiza la operación:</strong> @(User.Identity?.Name ?? "Admin/Usuario Predeterminado")</p>
+                    <p class="mb-1"><strong>Total de productos cargados:</strong> <span id="lblTotalProductos">0</span></p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <h4 class="mb-3">Monto total de la venta: $<span id="lblMontoTotal">0.00</span></h4>
+                    <button id="btnConfirmarPedido" class="btn btn-success btn-lg">Confirmar Pedido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Estado de la aplicación
+        let detallesPedido = [];
+        let pedidoConfirmado = false;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnAgregar = document.getElementById('btnAgregarProducto');
+            const btnConfirmar = document.getElementById('btnConfirmarPedido');
+
+            btnAgregar.addEventListener('click', buscarYAgregarProducto);
+            btnConfirmar.addEventListener('click', confirmarPedido);
+        });
+
+        async function buscarYAgregarProducto() {
+            if (pedidoConfirmado) return;
+
+            const inputId = document.getElementById('inputProductoId');
+            const idProducto = parseInt(inputId.value);
+
+            if (!idProducto || idProducto <= 0) {
+                alert("Por favor, ingrese un ID de producto válido.");
+                return;
+            }
+
+            // 4. Actualizar cantidad si ya existe
+            const productoExistente = detallesPedido.find(p => p.productoId === idProducto);
+            if (productoExistente) {
+                productoExistente.cantidad++;
+                productoExistente.subtotal = productoExistente.cantidad * productoExistente.costoUnitario;
+                actualizarTabla();
+                inputId.value = '';
+                return;
+            }
+
+            // Si no existe, lo buscamos en el backend
+            try {
+                // Creamos un FormData para simular el envío de un formulario tradicional y que el controlador lo entienda
+                const formData = new FormData();
+                formData.append('idProducto', idProducto);
+
+                const response = await fetch('@Url.Action("BuscarProducto", "Pedidos")', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.exito) {
+                    detallesPedido.push({
+                        productoId: data.id,
+                        descripcion: data.descripcion,
+                        costoUnitario: data.precio,
+                        cantidad: 1,
+                        subtotal: data.precio
+                    });
+                    actualizarTabla();
+                    inputId.value = ''; // Limpiar el input
+                } else {
+                    alert(data.mensaje);
+                }
+            } catch (error) {
+                console.error("Error al buscar el producto:", error);
+                alert("Ocurrió un error al intentar buscar el producto.");
+            }
+        }
+
+        function actualizarTabla() {
+            const tbody = document.getElementById('cuerpoTabla');
+            tbody.innerHTML = '';
+
+            let totalProductos = 0;
+            let montoTotal = 0;
+
+            detallesPedido.forEach(item => {
+                totalProductos += item.cantidad;
+                montoTotal += item.subtotal;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${item.cantidad}</td>
+                    <td>${item.descripcion}</td>
+                    <td>$${item.costoUnitario.toFixed(2)}</td>
+                    <td>$${item.subtotal.toFixed(2)}</td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${item.productoId})" ${pedidoConfirmado ? 'disabled' : ''}>
+                            Eliminar
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Actualizar los totales en el pie de página
+            document.getElementById('lblTotalProductos').innerText = totalProductos;
+            document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
+        }
+
+        // 5. Eliminar producto si no está confirmado
+        window.eliminarProducto = function(idProducto) {
+            if (pedidoConfirmado) return;
+
+            detallesPedido = detallesPedido.filter(p => p.productoId !== idProducto);
+            actualizarTabla();
+        }
+
+        async function confirmarPedido() {
+            if (pedidoConfirmado) return;
+
+            const clienteId = document.getElementById('selectCliente').value;
+
+            if (!clienteId) {
+                alert("Debe seleccionar un cliente antes de confirmar el pedido.");
+                return;
+            }
+
+            if (detallesPedido.length === 0) {
+                alert("El pedido no tiene productos cargados.");
+                return;
+            }
+
+            // Armar el objeto según el ViewModel 'ConfirmarPedido'
+            const datosDelFrente = {
+                ClienteId: parseInt(clienteId),
+                MontoTotal: detallesPedido.reduce((acc, item) => acc + item.subtotal, 0),
+                Detalles: detallesPedido.map(d => ({
+                    ProductoId: d.productoId,
+                    Cantidad: d.cantidad,
+                    CostoUnitario: d.costoUnitario
+                }))
+            };
+
+            try {
+                const response = await fetch('@Url.Action("Confirmar", "Pedidos")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(datosDelFrente)
+                });
+
+                const data = await response.json();
+
+                if (data.exito) {
+                    alert(data.mensaje);
+                    bloquearEdicion();
+                } else {
+                    alert(data.mensaje);
+                }
+            } catch (error) {
+                console.error("Error al confirmar:", error);
+                alert("Ocurrió un error grave al procesar el despacho.");
+            }
+        }
+
+        function bloquearEdicion() {
+            pedidoConfirmado = true;
+
+            // Bloquear Inputs y Botones
+            document.getElementById('selectCliente').disabled = true;
+            document.getElementById('inputProductoId').disabled = true;
+            document.getElementById('btnAgregarProducto').disabled = true;
+            document.getElementById('btnConfirmarPedido').disabled = true;
+            document.getElementById('btnConfirmarPedido').classList.replace('btn-success', 'btn-secondary');
+            document.getElementById('btnConfirmarPedido').innerText = "Pedido Confirmado";
+
+            // Deshabilitar los botones de eliminar en la tabla
+            const botonesEliminar = document.querySelectorAll('#cuerpoTabla .btn-danger');
+            botonesEliminar.forEach(btn => btn.disabled = true);
+        }
+    </script>
+}

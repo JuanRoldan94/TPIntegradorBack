@@ -13,6 +13,9 @@
         public Usuario Usuario { get; set; }
 
         public ICollection<DetallePedido> DetallePedido { get; set; }
-        public Pedido() { }
+        public Pedido()
+        {
+            DetallePedido = new List<DetallePedido>();
+        }
     }
 }
