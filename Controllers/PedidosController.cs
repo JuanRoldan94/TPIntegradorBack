@@ -116,6 +116,7 @@ namespace GestorDespacho.Controllers
                 await transaction.CommitAsync();
 
                 return Json(new { exito = true, mensaje = "Pedido despachado correctamente" });
+
             }catch (Exception e)
             {
                 await transaction.RollbackAsync();
