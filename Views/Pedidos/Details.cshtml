@@ -41,7 +41,7 @@
                     <p class="mb-1"><strong>Total de productos:</strong> <span id="lblTotalProductos">0</span></p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <h4 class="mb-3">Monto total: $<span id="lblMontoTotal">0.00</span></h4>
+                    <h4 class="mb-3">Monto total: <span id="lblMontoTotal">0.00</span></h4>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
             });
 
             document.getElementById('lblTotalProductos').innerText = totalProductos;
-            document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
+            document.getElementById('lblMontoTotal').innerText = montoTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', currencyDisplay: 'narrowSymbol' });
         }
     </script>
 }
