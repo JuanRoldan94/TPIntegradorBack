@@ -13,5 +13,6 @@ namespace TPIntegradorBack.Data
         public DbSet<Producto> Productos { get; set; }
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallePedido> DetallePedidos { get; private set; }
+
     }
 }

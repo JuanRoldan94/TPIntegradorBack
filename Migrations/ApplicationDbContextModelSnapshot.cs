@@ -47,7 +47,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("ClienteId");
 
-                    b.ToTable("Clientes");
+                    b.ToTable("Clientes", (string)null);
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.DetallePedido", b =>
@@ -79,7 +79,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("DetallePedidos");
+                    b.ToTable("DetallePedidos", (string)null);
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Direccion", b =>
@@ -106,7 +106,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Direcciones");
+                    b.ToTable("Direcciones", (string)null);
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Pedido", b =>
@@ -123,6 +123,9 @@ namespace TPIntegradorBack.Migrations
                     b.Property<bool>("Confirmado")
                         .HasColumnType("bit");
 
+                    b.Property<int>("DireccionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
@@ -136,9 +139,11 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasIndex("ClienteId");
 
+                    b.HasIndex("DireccionId");
+
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Pedidos");
+                    b.ToTable("Pedidos", (string)null);
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Producto", b =>
@@ -160,7 +165,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Productos");
+                    b.ToTable("Productos", (string)null);
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Usuario", b =>
@@ -188,7 +193,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("UsuarioId");
 
-                    b.ToTable("Usuarios");
+                    b.ToTable("Usuarios", (string)null);
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.DetallePedido", b =>
@@ -229,6 +234,12 @@ namespace TPIntegradorBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TPIntegradorBack.Models.Direccion", "Direccion")
+                        .WithMany()
+                        .HasForeignKey("DireccionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TPIntegradorBack.Models.Usuario", "Usuario")
                         .WithMany("Pedidos")
                         .HasForeignKey("UsuarioId")
@@ -236,6 +247,8 @@ namespace TPIntegradorBack.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
+
+                    b.Navigation("Direccion");
 
                     b.Navigation("Usuario");
                 });
