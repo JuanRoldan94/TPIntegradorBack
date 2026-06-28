@@ -1,9 +1,7 @@
 ﻿using GestorDespacho.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 using TPIntegradorBack.Data;
 using TPIntegradorBack.Models;
 
@@ -123,6 +121,28 @@ namespace GestorDespacho.Controllers
                 await transaction.RollbackAsync();
                 return Json(new { exito = false, mensaje = "Error al procesar el despacho", e.Message });
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index(string buscarUsuario)
+        {
+            var query = _context.Pedidos
+                .AsNoTracking()
+                .Include(p => p.Cliente)
+                .Include(p => p.Usuario)
+                .Include(p => p.DetallePedido)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(buscarUsuario))
+            {
+                query = query.Where(p => p.Usuario.NombreUsuario.Contains(buscarUsuario));
+            }
+
+            var pedidos = await query.ToListAsync();
+
+            ViewBag.FiltroUsuario = buscarUsuario;
+
+            return View(pedidos);
         }
     }
 }

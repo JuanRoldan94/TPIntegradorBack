@@ -9,6 +9,29 @@
 <p>
     <a asp-action="Crear">Nuevo Pedido</a>
 </p>
+
+<form asp-controller="Pedidos" asp-action="Index" method="get" class="mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="input-group">
+                <input type="text"
+                       name="buscarUsuario"
+                       class="form-control"
+                       placeholder="Buscar por nombre de usuario..."
+                       value="@ViewBag.FiltroUsuario" />
+
+                <button type="submit" class="btn btn-primary">
+                    Buscar
+                </button>
+
+                <a asp-controller="Pedidos" asp-action="Index" class="btn btn-secondary">
+                    Limpiar
+                </a>
+            </div>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
