@@ -27,10 +27,11 @@
             <th>
                 @Html.DisplayNameFor(model => model.Role)
             </th>
-            <th>
+@*             <th>
                 @Html.DisplayNameFor(model => model.Pedidos)
-            </th>
-            <th></th>
+            </th> *@
+            <th>Pedidos</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -52,7 +53,19 @@
                 @Html.DisplayFor(model => item.Role)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Pedidos)
+                @if (item.Pedidos != null && item.Pedidos.Any())
+                {
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var pedido in item.Pedidos)
+                        {
+                            <li><span>Pedido N°@pedido.PedidoId</span> - $@pedido.MontoTotal</li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <span class="text-muted">Sin pedidos</span>
+                }
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.UsuarioId">Edit</a> |

@@ -65,7 +65,7 @@
                 <ul class="list-unstyled">
                     @foreach (var pedido in Model.Pedidos)
                     {
-                        <li>Pedido @pedido.Fecha - Total: $@pedido.MontoTotal</li>
+                        <li>Pedido Dia @pedido.Fecha - Total: $@pedido.MontoTotal</li>
                     }
                 </ul>
             }
@@ -76,13 +76,6 @@
         </dd>
 
         </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Pedidos)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pedidos)
-        </dd>
-    </dl>
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ClienteId">Edit</a> |
