@@ -17,7 +17,10 @@ public class UsuariosController : Controller
 
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Usuarios.ToListAsync());
+        var usuarios = await _context.Usuarios
+            .Include(u => u.Pedidos)
+            .ToListAsync();
+        return View(usuarios);
     }
 
     public async Task<IActionResult> Details(int? id)
@@ -28,6 +31,7 @@ public class UsuariosController : Controller
         }
 
         var usuario = await _context.Usuarios
+            .Include(u => u.Pedidos)
             .FirstOrDefaultAsync(m => m.UsuarioId == id);
         if (usuario == null)
         {

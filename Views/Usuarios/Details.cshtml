@@ -37,20 +37,34 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Apellido)
         </dd>
-@*     </dl>
+    </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Role)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Role)
         </dd>
-    </dl> *@
+    </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Pedidos)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Pedidos)
+
+        <dd class="col-sm-10">
+            @if (Model.Pedidos != null && Model.Pedidos.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var pedido in Model.Pedidos)
+                    {
+                        <li>Pedido N°@pedido.PedidoId - Total: $@pedido.MontoTotal</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">Este usuario no tiene pedidos registrados.</span>
+            }
         </dd>
+
     </dl>
 </div>
 <div>
