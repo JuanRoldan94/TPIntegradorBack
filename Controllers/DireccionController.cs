@@ -21,15 +21,15 @@ public class DireccionController : Controller
     }
 
     // GET: DIRECCIONS/Details/5
-    public async Task<IActionResult> Details(int? direccionid)
+    public async Task<IActionResult> Details(int? id)
     {
-        if (direccionid == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var direccion = await _context.Direcciones
-            .FirstOrDefaultAsync(m => m.DireccionId == direccionid);
+            .FirstOrDefaultAsync(m => m.DireccionId == id);
         if (direccion == null)
         {
             return NotFound();
@@ -74,14 +74,14 @@ public class DireccionController : Controller
     }
 
     // GET: DIRECCIONS/Edit/5
-    public async Task<IActionResult> Edit(int? direccionid)
+    public async Task<IActionResult> Edit(int? id)
     {
-        if (direccionid == null)
+        if (id == null)
         {
             return NotFound();
         }
 
-        var direccion = await _context.Direcciones.FindAsync(direccionid);
+        var direccion = await _context.Direcciones.FindAsync(id);
         if (direccion == null)
         {
             return NotFound();
@@ -125,15 +125,15 @@ public class DireccionController : Controller
     }
 
     // GET: DIRECCIONS/Delete/5
-    public async Task<IActionResult> Delete(int? direccionid)
+    public async Task<IActionResult> Delete(int? id)
     {
-        if (direccionid == null)
+        if (id == null)
         {
             return NotFound();
         }
 
         var direccion = await _context.Direcciones
-            .FirstOrDefaultAsync(m => m.DireccionId == direccionid);
+            .FirstOrDefaultAsync(m => m.DireccionId == id);
         if (direccion == null)
         {
             return NotFound();
@@ -145,9 +145,9 @@ public class DireccionController : Controller
     // POST: DIRECCIONS/Delete/5
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int? direccionid)
+    public async Task<IActionResult> DeleteConfirmed(int? id)
     {
-        var direccion = await _context.Direcciones.FindAsync(direccionid);
+        var direccion = await _context.Direcciones.FindAsync(id);
         if (direccion != null)
         {
             _context.Direcciones.Remove(direccion);
@@ -157,8 +157,8 @@ public class DireccionController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    private bool DireccionExists(int? direccionid)
+    private bool DireccionExists(int? id)
     {
-        return _context.Direcciones.Any(e => e.DireccionId == direccionid);
+        return _context.Direcciones.Any(e => e.DireccionId == id);
     }
 }
