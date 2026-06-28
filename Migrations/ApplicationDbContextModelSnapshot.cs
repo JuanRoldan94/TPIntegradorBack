@@ -47,7 +47,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("ClienteId");
 
-                    b.ToTable("Clientes", (string)null);
+                    b.ToTable("Clientes");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.DetallePedido", b =>
@@ -79,7 +79,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasIndex("ProductoId");
 
-                    b.ToTable("DetallePedidos", (string)null);
+                    b.ToTable("DetallePedidos");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Direccion", b =>
@@ -106,7 +106,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.ToTable("Direcciones", (string)null);
+                    b.ToTable("Direcciones");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Pedido", b =>
@@ -123,9 +123,6 @@ namespace TPIntegradorBack.Migrations
                     b.Property<bool>("Confirmado")
                         .HasColumnType("bit");
 
-                    b.Property<int>("DireccionId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
@@ -139,11 +136,9 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasIndex("ClienteId");
 
-                    b.HasIndex("DireccionId");
-
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("Pedidos", (string)null);
+                    b.ToTable("Pedidos");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Producto", b =>
@@ -157,6 +152,9 @@ namespace TPIntegradorBack.Migrations
                     b.Property<string>("Descripcion")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Detalles")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("PrecioUnitario")
                         .HasColumnType("decimal(18,2)");
 
@@ -165,7 +163,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Productos", (string)null);
+                    b.ToTable("Productos");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Usuario", b =>
@@ -193,7 +191,7 @@ namespace TPIntegradorBack.Migrations
 
                     b.HasKey("UsuarioId");
 
-                    b.ToTable("Usuarios", (string)null);
+                    b.ToTable("Usuarios");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.DetallePedido", b =>
@@ -205,7 +203,7 @@ namespace TPIntegradorBack.Migrations
                         .IsRequired();
 
                     b.HasOne("TPIntegradorBack.Models.Producto", "Producto")
-                        .WithMany("Detalles")
+                        .WithMany()
                         .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -234,12 +232,6 @@ namespace TPIntegradorBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TPIntegradorBack.Models.Direccion", "Direccion")
-                        .WithMany()
-                        .HasForeignKey("DireccionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("TPIntegradorBack.Models.Usuario", "Usuario")
                         .WithMany("Pedidos")
                         .HasForeignKey("UsuarioId")
@@ -247,8 +239,6 @@ namespace TPIntegradorBack.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
-
-                    b.Navigation("Direccion");
 
                     b.Navigation("Usuario");
                 });
@@ -263,11 +253,6 @@ namespace TPIntegradorBack.Migrations
             modelBuilder.Entity("TPIntegradorBack.Models.Pedido", b =>
                 {
                     b.Navigation("DetallePedido");
-                });
-
-            modelBuilder.Entity("TPIntegradorBack.Models.Producto", b =>
-                {
-                    b.Navigation("Detalles");
                 });
 
             modelBuilder.Entity("TPIntegradorBack.Models.Usuario", b =>
