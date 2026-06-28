@@ -45,7 +45,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-md-6">
-                    <p class="mb-1"><strong>Usuario que realiza la operación:</strong> @(User.Identity?.Name ?? "Admin/Usuario Predeterminado")</p>
+                    <p class="mb-1"><strong>Usuario que realiza la operación:</strong> @(Context.Session.GetString("NombreUsuario") ?? "Admin/Usuario Predeterminado")</p>
                     <p class="mb-1"><strong>Total de productos cargados:</strong> <span id="lblTotalProductos">0</span></p>
                 </div>
                 <div class="col-md-6 text-md-end">

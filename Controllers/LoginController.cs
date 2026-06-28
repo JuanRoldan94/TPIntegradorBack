@@ -37,6 +37,7 @@ namespace TPIntegradorBack.Controllers
 
             HttpContext.Session.SetInt32("UsuarioId", usuario.UsuarioId);
             HttpContext.Session.SetString("Nombre", usuario.Nombre);
+            HttpContext.Session.SetString("NombreUsuario", usuario.NombreUsuario);
             HttpContext.Session.SetString("Role", usuario.Role.ToString());
 
             return RedirectToAction("Index", "Home");
