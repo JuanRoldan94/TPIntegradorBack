@@ -13,11 +13,19 @@
                 <option value="">-- Seleccione un cliente --</option>
             </select>
         </div>
+
+        <div class="col-md-6">
+            <label class="form-label fw-bold">2. Seleccionar Dirección de Entrega</label>
+            <select id="selectDireccion" class="form-select" disabled>
+                <option value="">-- Seleccione primero un cliente --</option>
+            </select>
+        </div>
     </div>
+
 
     <div class="row mb-4">
         <div class="col-md-6">
-            <label class="form-label fw-bold">2. Cargar Producto (por ID)</label>
+            <label class="form-label fw-bold">3. Cargar Producto (por ID)</label>
             <div class="input-group">
                 <input type="number" id="inputProductoId" class="form-control" placeholder="Ingrese el id_producto" min="1" />
                 <button class="btn btn-primary" id="btnAgregarProducto" type="button">Agregar Producto</button>
@@ -58,8 +66,7 @@
 </div>
 
 @section Scripts {
-    <script>
-        // Estado de la aplicación
+        <script>
         let detallesPedido = [];
         let pedidoConfirmado = false;
 
@@ -69,6 +76,42 @@
 
             btnAgregar.addEventListener('click', buscarYAgregarProducto);
             btnConfirmar.addEventListener('click', confirmarPedido);
+        });
+
+        const selectCliente = document.getElementById('selectCliente');
+        const selectDireccion = document.getElementById('selectDireccion');
+
+        selectCliente.addEventListener('change', async function () {
+            const clienteId = this.value;
+
+            selectDireccion.innerHTML = '<option value="">-- Seleccione una dirección --</option>';
+
+            if (!clienteId) {
+                selectDireccion.disabled = true;
+                selectDireccion.innerHTML = '<option value="">-- Seleccione primero un cliente --</option>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`@Url.Action("ObtenerDireccionesCliente", "Pedidos")?clienteId=${clienteId}`);
+                const direcciones = await response.json();
+
+                if (direcciones.length > 0) {
+                    selectDireccion.disabled = false;
+                    direcciones.forEach(d => {
+                        const option = document.createElement('option');
+                        option.value = d.id;
+                        option.textContent = d.texto;
+                        selectDireccion.appendChild(option);
+                    });
+                } else {
+                    selectDireccion.disabled = true;
+                    selectDireccion.innerHTML = '<option value="">Este cliente no tiene direcciones registradas</option>';
+                }
+            } catch (error) {
+                console.error("Error al obtener direcciones:", error);
+                alert("Ocurrió un error al buscar las direcciones del cliente.");
+            }
         });
 
         async function buscarYAgregarProducto() {
@@ -82,7 +125,6 @@
                 return;
             }
 
-            // 4. Actualizar cantidad si ya existe
             const productoExistente = detallesPedido.find(p => p.productoId === idProducto);
             if (productoExistente) {
                 productoExistente.cantidad++;
@@ -92,9 +134,7 @@
                 return;
             }
 
-            // Si no existe, lo buscamos en el backend
             try {
-                // Creamos un FormData para simular el envío de un formulario tradicional y que el controlador lo entienda
                 const formData = new FormData();
                 formData.append('idProducto', idProducto);
 
@@ -114,7 +154,7 @@
                         subtotal: data.precio
                     });
                     actualizarTabla();
-                    inputId.value = ''; // Limpiar el input
+                    inputId.value = '';
                 } else {
                     alert(data.mensaje);
                 }
@@ -150,12 +190,10 @@
                 tbody.appendChild(tr);
             });
 
-            // Actualizar los totales en el pie de página
             document.getElementById('lblTotalProductos').innerText = totalProductos;
             document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
         }
 
-        // 5. Eliminar producto si no está confirmado
         window.eliminarProducto = function(idProducto) {
             if (pedidoConfirmado) return;
 
@@ -167,18 +205,23 @@
             if (pedidoConfirmado) return;
 
             const clienteId = document.getElementById('selectCliente').value;
+            const direccionId = document.getElementById('selectDireccion').value;
 
             if (!clienteId) {
                 alert("Debe seleccionar un cliente antes de confirmar el pedido.");
                 return;
             }
-
+            
             if (detallesPedido.length === 0) {
                 alert("El pedido no tiene productos cargados.");
                 return;
             }
 
-            // Armar el objeto según el ViewModel 'ConfirmarPedido'
+            if(!direccionId){
+                alert("Debe seleccionar una direccion valida antes de confirmar el pedido");
+                return;
+            }
+
             const datosDelFrente = {
                 ClienteId: parseInt(clienteId),
                 MontoTotal: detallesPedido.reduce((acc, item) => acc + item.subtotal, 0),
@@ -215,7 +258,6 @@
         function bloquearEdicion() {
             pedidoConfirmado = true;
 
-            // Bloquear Inputs y Botones
             document.getElementById('selectCliente').disabled = true;
             document.getElementById('inputProductoId').disabled = true;
             document.getElementById('btnAgregarProducto').disabled = true;
@@ -223,7 +265,6 @@
             document.getElementById('btnConfirmarPedido').classList.replace('btn-success', 'btn-secondary');
             document.getElementById('btnConfirmarPedido').innerText = "Pedido Confirmado";
 
-            // Deshabilitar los botones de eliminar en la tabla
             const botonesEliminar = document.querySelectorAll('#cuerpoTabla .btn-danger');
             botonesEliminar.forEach(btn => btn.disabled = true);
         }

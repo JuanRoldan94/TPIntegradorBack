@@ -34,7 +34,7 @@ namespace GestorDespacho.Controllers
                 .Include(p => p.Cliente)
                 .Include(p => p.Usuario)
                 .Include(p => p.DetallePedido)
-                    .ThenInclude(d => d.Producto)
+                .ThenInclude(d => d.Producto)
                 .FirstOrDefaultAsync(p => p.PedidoId == id);
 
             if (pedido == null) return NotFound();
@@ -143,6 +143,22 @@ namespace GestorDespacho.Controllers
             ViewBag.FiltroUsuario = buscarUsuario;
 
             return View(pedidos);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ObtenerDireccionesCliente(int clienteId)
+        {
+            var direcciones = await _context.Direcciones
+                .AsNoTracking()
+                .Where(d => d.ClienteId == clienteId)
+                .Select(d => new
+                {
+                    id = d.DireccionId,
+                    texto = $"{d.Calle} {d.Numero}, {d.Localidad}"
+                })
+                .ToListAsync();
+            return Json(direcciones);
+
         }
     }
 }
