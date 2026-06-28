@@ -30,21 +30,52 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Telefono)
         </dd>
-    </dl>
+        </dl>
+            <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.Activo)
+            </dt>
+            <dd class = "col-sm-10">
+                @Html.DisplayFor(model => model.Activo)
+            </dd>
+        </dl>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Activo)
+            Direcciones
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Activo)
+            @if (Model.Direcciones != null && Model.Direcciones.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var direccion in Model.Direcciones)
+                    {
+                        <li> @direccion.Calle @direccion.Numero, @direccion.Localidad</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">Este cliente no tiene direcciones registradas</span>
+            }
         </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Direcciones)
+        <dt class="col-sm-2">
+            Pedidos
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Direcciones)
+        <dd class="col-sm-10">
+            @if (Model.Pedidos != null && Model.Pedidos.Any())
+            {
+                <ul class="list-unstyled">
+                    @foreach (var pedido in Model.Pedidos)
+                    {
+                        <li>Pedido @pedido.Fecha - Total: $@pedido.MontoTotal</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">No hay pedidos registrados.</span>
+            }
         </dd>
-    </dl>
+
+        </dl>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Pedidos)
         </dt>

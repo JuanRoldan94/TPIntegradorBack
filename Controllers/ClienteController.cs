@@ -27,6 +27,8 @@ public class ClienteController : Controller
         }
 
         var cliente = await _context.Clientes
+            .Include(c => c.Direcciones)
+            .Include(c => c.Pedidos)
             .FirstOrDefaultAsync(m => m.ClienteId == id);
         if (cliente == null)
         {
