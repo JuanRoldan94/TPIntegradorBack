@@ -4,11 +4,11 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Lista de usuarios</h1>
+<h1>ABM de usuarios</h1>
 
-<p>
-    <a asp-action="Create">Crear Nuevo Usuario</a>
-</p>
+<div>
+    <a class="btn btn-success" asp-action="Create">Crear Nuevo Usuario</a>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -68,9 +68,9 @@
                 }
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.UsuarioId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UsuarioId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UsuarioId">Delete</a>
+                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.UsuarioId">Editar</a> 
+                <a class="btn btn-warning btn-sm" asp-action="Details" asp-route-id="@item.UsuarioId">Ver</a> 
+                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.UsuarioId">Eliminar</a>
             </td>
         </tr>
 }
