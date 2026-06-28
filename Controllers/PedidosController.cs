@@ -98,6 +98,22 @@ namespace GestorDespacho.Controllers
 
                 foreach (var item in datosDelFrente.Detalles)
                 {
+                    var producto = await _context.Productos.FindAsync(item.ProductoId);
+
+                    if (producto == null)
+                    {
+                        await transaction.RollbackAsync();
+                        return Json(new { exito = false, mensaje = $"El producto con ID {item.ProductoId} no existe." });
+                    }
+
+                    if (producto.Stock < item.Cantidad)
+                    {
+                        await transaction.RollbackAsync();
+                        return Json(new {exito = false, mensaje = $"No hay stock suficiente para '{producto.Descripcion}'. Stock disponible: {producto.Stock}." });
+                    }
+
+                    producto.Stock -= item.Cantidad;
+
                     var detalle = new TPIntegradorBack.Models.DetallePedido
                     {
                         PedidoId = nuevoPedido.PedidoId,
