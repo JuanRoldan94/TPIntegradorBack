@@ -177,13 +177,23 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td>${item.cantidad}</td>
-                    <td>${item.descripcion}</td>
-                    <td>$${item.costoUnitario.toFixed(2)}</td>
-                    <td>$${item.subtotal.toFixed(2)}</td>
-                    <td>
+                    <td class="text-center align-middle">
+                        <button class="btn btn-sm btn-outline-secondary me-2" onclick="restarProducto(${item.productoId})" ${pedidoConfirmado ? 'disabled' : ''}>
+                            <strong>-</strong>
+                        </button>
+
+                        <span class="fw-bold px-2">${item.cantidad}</span>
+
+                        <button class="btn btn-sm btn-outline-secondary ms-2" onclick="sumarProducto(${item.productoId})" ${pedidoConfirmado ? 'disabled' : ''}>
+                            <strong>+</strong>
+                        </button>
+                    </td>
+                    <td class="align-middle">${item.descripcion}</td>
+                    <td class="align-middle">$${item.costoUnitario.toFixed(2)}</td>
+                    <td class="align-middle">$${item.subtotal.toFixed(2)}</td>
+                    <td class="align-middle">
                         <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${item.productoId})" ${pedidoConfirmado ? 'disabled' : ''}>
-                            Eliminar
+                            Eliminar Fila
                         </button>
                     </td>
                 `;
@@ -193,12 +203,39 @@
             document.getElementById('lblTotalProductos').innerText = totalProductos;
             document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
         }
+        window.restarProducto = function(idProducto) {
+            if (pedidoConfirmado) return;
+
+            const producto = detallesPedido.find(p => p.productoId === idProducto);
+
+            if (producto) {
+                if (producto.cantidad > 1) {
+                    producto.cantidad--;
+                    producto.subtotal = producto.cantidad * producto.costoUnitario;
+                    actualizarTabla();
+                } else {
+                    eliminarProducto(idProducto);
+                }
+            }
+        }
 
         window.eliminarProducto = function(idProducto) {
             if (pedidoConfirmado) return;
 
             detallesPedido = detallesPedido.filter(p => p.productoId !== idProducto);
             actualizarTabla();
+        }
+
+        window.sumarProducto = function(idProducto) {
+            if (pedidoConfirmado) return;
+
+            const producto = detallesPedido.find(p => p.productoId === idProducto);
+
+            if (producto) {
+                producto.cantidad++;
+                producto.subtotal = producto.cantidad * producto.costoUnitario;
+                actualizarTabla();
+            }
         }
 
         async function confirmarPedido() {
