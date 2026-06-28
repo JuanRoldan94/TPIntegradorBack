@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GestorDespacho.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using TPIntegradorBack.Data;
-using GestorDespacho.ViewModels;
-using TPIntegradorBack.Models;
 using System.Security.Claims;
+using TPIntegradorBack.Data;
+using TPIntegradorBack.Models;
 
 namespace GestorDespacho.Controllers
 {
@@ -74,21 +75,21 @@ namespace GestorDespacho.Controllers
         [HttpPost]
         public async Task<IActionResult> Confirmar([FromBody] ConfirmarPedido datosDelFrente)
         {
-            if (datosDelFrente == null || !datosDelFrente.Detalles.Any())
-            {
-                return Json(new { exito = false, mensaje = "El pedido no tiene productos" });
-            }
             using var transaction = await _context.Database.BeginTransactionAsync();
 
             try
             {
-                var usuarioIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                int usuarioId = string.IsNullOrEmpty(usuarioIdClaim) ? 1 : int.Parse(usuarioIdClaim);
+                int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+
+                if (usuarioId == null)
+                {
+                    return Json(new { exito = false, mensaje = "Usuario no autenticaodo" });
+                }
 
                 var nuevoPedido = new Pedido
                 {
                     ClienteId = datosDelFrente.ClienteId,
-                    UsuarioId = usuarioId,
+                    UsuarioId = usuarioId.Value,
                     Fecha = DateTime.Now,
                     MontoTotal = datosDelFrente.MontoTotal,
                     Confirmado = true
@@ -112,12 +113,12 @@ namespace GestorDespacho.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-
                 await transaction.CommitAsync();
 
                 return Json(new { exito = true, mensaje = "Pedido despachado correctamente" });
 
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 await transaction.RollbackAsync();
                 return Json(new { exito = false, mensaje = "Error al procesar el despacho", e.Message });
