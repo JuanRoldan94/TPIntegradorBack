@@ -4,44 +4,43 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar dirección</h1>
 
-<h4>Direccion</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="DireccionId" />
-            <div class="form-group">
-                <label asp-for="Calle" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Calle" class="form-label"></label>
                 <input asp-for="Calle" class="form-control" />
                 <span asp-validation-for="Calle" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Numero" class="form-label"></label>
                 <input asp-for="Numero" class="form-control" />
                 <span asp-validation-for="Numero" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Localidad" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Localidad" class="form-label"></label>
                 <input asp-for="Localidad" class="form-control" />
                 <span asp-validation-for="Localidad" class="text-danger"></span>
             </div>
-@*             <div class="form-group">
-                <label asp-for="Cliente" class="control-label"></label>
+@*             <div class="mb-3">
+                <label asp-for="Cliente" class="form-label"></label>
                 <input asp-for="Cliente" class="form-control" />
                 <span asp-validation-for="Cliente" class="text-danger"></span>
             </div> *@
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="mb-3">
+                <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary" asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {

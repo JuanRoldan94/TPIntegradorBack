@@ -4,48 +4,47 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Nueva dirección</h1>
 
-<h4>Direccion</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="form-group">
-                <label asp-for="ClienteId" class="control-label">Cliente</label>
+            <div class="mb-3">
+                <label asp-for="ClienteId" class="form-label">Cliente</label>
                 <select asp-for="ClienteId" class="form-control" asp-items="ViewBag.Clientes">
                     <option value="">-- Seleccione un cliente --</option>
                 </select>
                 <span asp-validation-for="ClienteId" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Calle" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Calle" class="form-label"></label>
                 <input asp-for="Calle" class="form-control" />
                 <span asp-validation-for="Calle" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Numero" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Numero" class="form-label"></label>
                 <input asp-for="Numero" class="form-control" />
                 <span asp-validation-for="Numero" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Localidad" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Localidad" class="form-label"></label>
                 <input asp-for="Localidad" class="form-control" />
                 <span asp-validation-for="Localidad" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+            <div class="mb-3">
+                <input type="submit" value="Crear" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a class="btn btn-secondary" asp-action="Index">Volver</a>
 </div>
