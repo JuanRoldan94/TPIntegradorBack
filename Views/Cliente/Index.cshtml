@@ -4,13 +4,12 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Clientes</h1>
-
-<p>
-    <a asp-action="Create">Agregar Nuevo Cliente</a>
-</p>
+<h1>Lista de Clientes</h1>
+<div>
+    <a class="btn btn-success mb-3" asp-action="Create">Crear Nuevo Cliente</a>
+</div>
 <table class="table">
-    <thead>
+    <thead class="thead-primary">
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.RazonSocial)
@@ -57,9 +56,9 @@
                 @Html.DisplayFor(model => item.Pedidos)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ClienteId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ClienteId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ClienteId">Delete</a>
+                <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.ClienteId">Editar</a>
+                <a class="btn btn-warning btn-sm" asp-action="Details" asp-route-id="@item.ClienteId">Ver</a>
+                <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.ClienteId">Eliminar</a>
             </td>
         </tr>
 }

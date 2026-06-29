@@ -4,47 +4,46 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Editar</h1>
+<h1>Editar Usuario</h1>
 
-<h4>Usuario</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UsuarioId" />
-            <div class="form-group">
-                <label asp-for="NombreUsuario" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="NombreUsuario" class="form-label"></label>
                 <input asp-for="NombreUsuario" class="form-control" />
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Contrasenia" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Contrasenia" class="form-label"></label>
                 <input asp-for="Contrasenia" class="form-control" />
                 <span asp-validation-for="Contrasenia" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Nombre" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Nombre" class="form-label"></label>
                 <input asp-for="Nombre" class="form-control" />
                 <span asp-validation-for="Nombre" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Apellido" class="control-label"></label>
+            <div class="mb-3">
+                <label asp-for="Apellido" class="form-label"></label>
                 <input asp-for="Apellido" class="form-control" />
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
 
-@*             <div class="form-group">
-                <label asp-for="Pedidos" class="control-label"></label>
+@*             <div class="mb-3">
+                <label asp-for="Pedidos" class="form-label"></label>
                 <input asp-for="Pedidos" class="form-control" />
                 <span asp-validation-for="Pedidos" class="text-danger"></span>
             </div> *@
-            <div class="form-group">
-                <label asp-for="Role" class="control-label"></label>
+            <div class="mb-3 form-check">
                 <input asp-for="Role" class="form-check-input" />
+                <label asp-for="Role" class="form-check-label"></label>
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="mb-3">
                 <input type="submit" value="Guardar" class="btn btn-primary" />
             </div>
         </form>
@@ -52,7 +51,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Volver a Usuarios</a>
+    <a class="btn btn-secondary" asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {
