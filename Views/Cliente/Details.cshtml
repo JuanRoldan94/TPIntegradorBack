@@ -64,9 +64,16 @@
                 <ul class="list-unstyled">
                     @foreach (var pedido in Model.Pedidos)
                     {
-                        <li>Pedido Dia @pedido.Fecha - Total: $@pedido.MontoTotal</li>
+                        <li>Pedido Día @pedido.Fecha.ToShortDateString() - Total: $@pedido.MontoTotal</li>
                     }
                 </ul>
+
+                <a class="btn btn-info btn-sm mt-2"
+                   asp-controller="Pedidos"
+                   asp-action="Index"
+                   asp-route-buscarCliente="@Model.RazonSocial">
+                    Ver todos los pedidos de este cliente
+                </a>
             }
             else
             {

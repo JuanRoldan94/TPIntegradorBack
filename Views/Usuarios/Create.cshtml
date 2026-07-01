@@ -12,13 +12,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="mb-3">
-                <label asp-for="NombreUsuario" class="form-label"></label>
+                <label asp-for="NombreUsuario" class="form-label">Nombre de Usuario</label>
                 <input asp-for="NombreUsuario" class="form-control" />
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
 
             <div class="mb-3">
-                <label asp-for="Contrasenia" class="form-label"></label>
+                <label asp-for="Contrasenia" class="form-label">Contraseña</label>
                 <input asp-for="Contrasenia" class="form-control" />
                 <span asp-validation-for="Contrasenia" class="text-danger"></span>
             </div>
@@ -35,11 +35,11 @@
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
 
-            <div class="mb-3">
+@*             <div class="mb-3">
                 <label asp-for="Pedidos" class="form-label"></label>
                 <input asp-for="Pedidos" class="form-control" />
                 <span asp-validation-for="Pedidos" class="text-danger"></span>
-            </div>
+            </div> *@
             <div class="mb-3">
                 <input type="submit" value="Crear" class="btn btn-success" />
             </div>

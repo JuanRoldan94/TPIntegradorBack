@@ -13,12 +13,12 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="UsuarioId" />
             <div class="mb-3">
-                <label asp-for="NombreUsuario" class="form-label"></label>
+                <label asp-for="NombreUsuario" class="form-label">Nombre de Usuario</label>
                 <input asp-for="NombreUsuario" class="form-control" />
                 <span asp-validation-for="NombreUsuario" class="text-danger"></span>
             </div>
             <div class="mb-3">
-                <label asp-for="Contrasenia" class="form-label"></label>
+                <label asp-for="Contrasenia" class="form-label">Contraseña</label>
                 <input asp-for="Contrasenia" class="form-control" />
                 <span asp-validation-for="Contrasenia" class="text-danger"></span>
             </div>
@@ -40,7 +40,7 @@
             </div> *@
             <div class="mb-3 form-check">
                 <input asp-for="Role" class="form-check-input" />
-                <label asp-for="Role" class="form-check-label"></label>
+                <label asp-for="Role" class="form-check-label">Hacer Administrador</label>
                 <span asp-validation-for="Role" class="text-danger"></span>
             </div>
             <div class="mb-3">

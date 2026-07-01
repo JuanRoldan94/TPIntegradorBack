@@ -13,9 +13,9 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.NombreUsuario)
+                Nombre de Usuario
             </th>
-@*             <th>
+@*          <th>
                 @Html.DisplayNameFor(model => model.Contrasenia)
             </th> *@
             <th>
@@ -24,9 +24,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Apellido)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Role)
-            </th>
+            <th>Rol</th>
 @*             <th>
                 @Html.DisplayNameFor(model => model.Pedidos)
             </th> *@
@@ -50,17 +48,35 @@
                 @Html.DisplayFor(model => item.Apellido)
             </td>
             <td>
-                @Html.DisplayFor(model => item.Role)
+                    @if (item.Role == true)
+                    {
+                        <span class="btn-success">Admin</span>
+                    }
+                    else if (item.Role == false)
+                    {
+                        <span class="badge">User</span>
+                    }
+                    else
+                    {
+                        <span class="badge">@item.Role</span>
+                    }
+                @* @Html.DisplayFor(model => item.Role) *@
             </td>
             <td>
                 @if (item.Pedidos != null && item.Pedidos.Any())
                 {
-                    <ul class="list-unstyled mb-0">
+                     <a class="btn btn-outline-success"
+                         asp-controller="Pedidos"
+                        asp-action="Index"
+                        asp-route-buscarUsuario="@item.NombreUsuario">
+                        Ver Pedidos
+                    </a>
+                    @* <ul class="list-unstyled mb-0">
                         @foreach (var pedido in item.Pedidos)
                         {
                             <li><span>Pedido N°@pedido.PedidoId</span> - $@pedido.MontoTotal</li>
                         }
-                    </ul>
+                    </ul> *@
                 }
                 else
                 {
@@ -69,7 +85,7 @@
             </td>
             <td>
                 <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.UsuarioId">Editar</a> 
-                <a class="btn btn-warning btn-sm" asp-action="Details" asp-route-id="@item.UsuarioId">Ver</a> 
+@*                 <a class="btn btn-warning btn-sm" asp-action="Details" asp-route-id="@item.UsuarioId">Ver</a>  *@
                 <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.UsuarioId">Eliminar</a>
             </td>
         </tr>
