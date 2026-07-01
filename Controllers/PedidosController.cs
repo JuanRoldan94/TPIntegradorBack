@@ -140,7 +140,7 @@ namespace GestorDespacho.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string buscarUsuario)
+        public async Task<IActionResult> Index(string buscarCliente, string buscarUsuario)
         {
             var query = _context.Pedidos
                 .AsNoTracking()
@@ -149,6 +149,11 @@ namespace GestorDespacho.Controllers
                 .Include(p => p.DetallePedido)
                 .AsQueryable();
 
+            if (!string.IsNullOrEmpty(buscarCliente))
+            {
+                query = query.Where(p => p.Cliente.RazonSocial.Contains(buscarCliente));
+            }
+
             if (!string.IsNullOrEmpty(buscarUsuario))
             {
                 query = query.Where(p => p.Usuario.NombreUsuario.Contains(buscarUsuario));
@@ -156,10 +161,12 @@ namespace GestorDespacho.Controllers
 
             var pedidos = await query.ToListAsync();
 
+            ViewBag.FiltroCliente = buscarCliente;
             ViewBag.FiltroUsuario = buscarUsuario;
 
             return View(pedidos);
         }
+
 
         [HttpGet]
         public async Task<IActionResult> ObtenerDireccionesCliente(int clienteId)
