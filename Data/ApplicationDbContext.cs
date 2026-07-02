@@ -14,5 +14,11 @@ namespace TPIntegradorBack.Data
         public DbSet<Pedido> Pedidos { get; set; }
         public DbSet<DetallePedido> DetallePedidos { get; private set; }
 
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    base.OnModelCreating(modelBuilder);
+
+        //    modelBuilder.Entity<Usuario>().HasQueryFilter(u => u.Activo);
+        //}
     }
 }
