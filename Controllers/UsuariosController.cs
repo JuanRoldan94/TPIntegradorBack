@@ -18,6 +18,7 @@ public class UsuariosController : Controller
     public async Task<IActionResult> Index()
     {
         var usuarios = await _context.Usuarios
+            .Where(u => u.Activo == true)
             .Include(u => u.Pedidos)
             .ToListAsync();
         return View(usuarios);
@@ -136,7 +137,8 @@ public class UsuariosController : Controller
         var usuario = await _context.Usuarios.FindAsync(id);
         if (usuario != null)
         {
-            _context.Usuarios.Remove(usuario);
+            usuario.Activo = false;
+            _context.Usuarios.Update(usuario);
         }
 
         await _context.SaveChangesAsync();

@@ -27,6 +27,7 @@ public class ClienteController : Controller
         }
 
         var cliente = await _context.Clientes
+            .Where(c => c.Activo == true)
             .Include(c => c.Direcciones)
             .Include(c => c.Pedidos)
             .FirstOrDefaultAsync(m => m.ClienteId == id);
@@ -131,7 +132,8 @@ public class ClienteController : Controller
         var cliente = await _context.Clientes.FindAsync(id);
         if (cliente != null)
         {
-            _context.Clientes.Remove(cliente);
+            cliente.Activo = false;
+            _context.Clientes.Update(cliente);
         }
 
         await _context.SaveChangesAsync();
