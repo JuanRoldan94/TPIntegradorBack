@@ -35,6 +35,11 @@
                 <span asp-validation-for="Apellido" class="text-danger"></span>
             </div>
 
+            <div class="mb-3 form-check">
+                <input asp-for="Role" class="form-check-input" />
+                <label asp-for="Role" class="form-check-label">Hacer Administrador</label>
+                <span asp-validation-for="Role" class="text-danger"></span>
+            </div>
 @*             <div class="mb-3">
                 <label asp-for="Pedidos" class="form-label"></label>
                 <input asp-for="Pedidos" class="form-control" />

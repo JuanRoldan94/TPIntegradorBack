@@ -55,8 +55,6 @@ public class UsuariosController : Controller
     {
         if (ModelState.IsValid)
         {
-            usuario.Role = false;
-
             _context.Add(usuario);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

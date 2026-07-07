@@ -26,9 +26,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Direcciones)
             </th>
-            @* <th>
-                @Html.DisplayNameFor(model => model.Pedidos)
-            </th> *@
         </tr>
     </thead>
     <tbody>
@@ -49,7 +46,22 @@
             <td>
                 @if (item.Direcciones != null && item.Direcciones.Any())
                 {
-                    @string.Join(" || ", item.Direcciones.Select(d => $"{d.Calle} {d.Numero}, {d.Localidad}"))
+                    var primeraDireccion = item.Direcciones.FirstOrDefault();
+
+                    <span>@primeraDireccion.Calle @primeraDireccion.Numero</span>
+                    @if (item.Direcciones.Count > 1)
+                    {
+                        <a asp-controller="Direccion"
+                            asp-action="Index"
+                            asp-route-clienteId="@item.ClienteId">
+                            Ver Mas
+                        </a>
+                    }
+
+                }
+                else
+                {
+                    <span class="text-muted">Sin direcciones asociadas</span>
                 }
             </td>
             <td>

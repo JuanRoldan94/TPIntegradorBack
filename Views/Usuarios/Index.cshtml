@@ -15,9 +15,6 @@
             <th>
                 Nombre de Usuario
             </th>
-@*          <th>
-                @Html.DisplayNameFor(model => model.Contrasenia)
-            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
@@ -25,9 +22,6 @@
                 @Html.DisplayNameFor(model => model.Apellido)
             </th>
             <th>Rol</th>
-@*             <th>
-                @Html.DisplayNameFor(model => model.Pedidos)
-            </th> *@
             <th>Pedidos</th>
             <th>Acciones</th>
         </tr>
@@ -38,9 +32,6 @@
             <td>
                 @Html.DisplayFor(model => item.NombreUsuario)
             </td>
-@*             <td>
-                @Html.DisplayFor(model => item.Contrasenia)
-            </td> *@
             <td>
                 @Html.DisplayFor(model => item.Nombre)
             </td>
@@ -60,7 +51,6 @@
                     {
                         <span class="badge">@item.Role</span>
                     }
-                @* @Html.DisplayFor(model => item.Role) *@
             </td>
             <td>
                 @if (item.Pedidos != null && item.Pedidos.Any())
@@ -71,12 +61,6 @@
                         asp-route-buscarUsuario="@item.NombreUsuario">
                         Ver Pedidos
                     </a>
-                    @* <ul class="list-unstyled mb-0">
-                        @foreach (var pedido in item.Pedidos)
-                        {
-                            <li><span>Pedido N°@pedido.PedidoId</span> - $@pedido.MontoTotal</li>
-                        }
-                    </ul> *@
                 }
                 else
                 {
@@ -85,7 +69,6 @@
             </td>
             <td>
                 <a class="btn btn-primary btn-sm" asp-action="Edit" asp-route-id="@item.UsuarioId">Editar</a> 
-@*                 <a class="btn btn-warning btn-sm" asp-action="Details" asp-route-id="@item.UsuarioId">Ver</a>  *@
                 <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.UsuarioId">Eliminar</a>
             </td>
         </tr>
