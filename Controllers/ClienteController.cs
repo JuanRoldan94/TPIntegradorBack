@@ -16,7 +16,12 @@ public class ClienteController : Controller
 
     public async Task<IActionResult> Index()
     {
-        return View(await _context.Clientes.Include(c => c.Direcciones).ToListAsync());
+        var clientesActivos = await _context.Clientes
+            .Include(c => c.Direcciones)
+            .OrderByDescending(c => c.Activo)
+            .ToListAsync();
+
+        return View(clientesActivos);
     }
 
     public async Task<IActionResult> Details(int? id)
@@ -27,7 +32,6 @@ public class ClienteController : Controller
         }
 
         var cliente = await _context.Clientes
-            .Where(c => c.Activo == true)
             .Include(c => c.Direcciones)
             .Include(c => c.Pedidos)
             .FirstOrDefaultAsync(m => m.ClienteId == id);

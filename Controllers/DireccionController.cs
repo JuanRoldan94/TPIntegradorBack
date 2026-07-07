@@ -1,7 +1,7 @@
-
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 using TPIntegradorBack.Data;
 using TPIntegradorBack.Models;
 
@@ -15,9 +15,18 @@ public class DireccionController : Controller
     }
 
     // GET: DIRECCIONS
-    public async Task<IActionResult> Index()    
+    public async Task<IActionResult> Index(int? clienteId)    
     {
-        return View(await _context.Direcciones.Include(d => d.Cliente).ToListAsync());
+        var query = _context.Direcciones
+            .Include(d => d.Cliente)
+            .AsQueryable();
+        
+        if (clienteId.HasValue)
+        {
+            query = query.Where(d => d.ClienteId == clienteId.Value);
+        }
+
+        return View(await query.ToListAsync());
     }
 
     // GET: DIRECCIONS/Details/5
