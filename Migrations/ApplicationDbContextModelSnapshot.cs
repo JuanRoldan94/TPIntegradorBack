@@ -93,12 +93,14 @@ namespace TPIntegradorBack.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DireccionId"));
 
                     b.Property<string>("Calle")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
                     b.Property<string>("Localidad")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Numero")
@@ -125,6 +127,9 @@ namespace TPIntegradorBack.Migrations
                     b.Property<bool>("Confirmado")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("DireccionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("Fecha")
                         .HasColumnType("datetime2");
 
@@ -137,6 +142,8 @@ namespace TPIntegradorBack.Migrations
                     b.HasKey("PedidoId");
 
                     b.HasIndex("ClienteId");
+
+                    b.HasIndex("DireccionId");
 
                     b.HasIndex("UsuarioId");
 
@@ -152,6 +159,7 @@ namespace TPIntegradorBack.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Detalles")
@@ -239,6 +247,10 @@ namespace TPIntegradorBack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TPIntegradorBack.Models.Direccion", "Direccion")
+                        .WithMany()
+                        .HasForeignKey("DireccionId");
+
                     b.HasOne("TPIntegradorBack.Models.Usuario", "Usuario")
                         .WithMany("Pedidos")
                         .HasForeignKey("UsuarioId")
@@ -246,6 +258,8 @@ namespace TPIntegradorBack.Migrations
                         .IsRequired();
 
                     b.Navigation("Cliente");
+
+                    b.Navigation("Direccion");
 
                     b.Navigation("Usuario");
                 });

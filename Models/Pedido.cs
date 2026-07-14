@@ -14,7 +14,7 @@ namespace TPIntegradorBack.Models
         [ForeignKey("Usuario")]
         public int UsuarioId { get; set; }
         [ForeignKey("Direccion")]
-        public int DireccionId { get; set; }
+        public int? DireccionId { get; set; }
         public Cliente Cliente { get; set; }
         public Usuario Usuario { get; set; }
         public Direccion Direccion { get; set; }

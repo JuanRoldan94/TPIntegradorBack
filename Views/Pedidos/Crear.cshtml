@@ -98,6 +98,9 @@
 
                 if (direcciones.length > 0) {
                     selectDireccion.disabled = false;
+
+                    selectDireccion.innerHTML = '';
+
                     direcciones.forEach(d => {
                         const option = document.createElement('option');
                         option.value = d.id;
@@ -106,7 +109,7 @@
                     });
                 } else {
                     selectDireccion.disabled = true;
-                    selectDireccion.innerHTML = '<option value="">Este cliente no tiene direcciones registradas</option>';
+                    selectDireccion.innerHTML = '<option value="0">Retira en Local</option>';
                 }
             } catch (error) {
                 console.error("Error al obtener direcciones:", error);
@@ -254,13 +257,16 @@
                 return;
             }
 
-            if(!direccionId){
+            if(direccionId === ""){
                 alert("Debe seleccionar una direccion valida antes de confirmar el pedido");
                 return;
             }
 
             const datosDelFrente = {
                 ClienteId: parseInt(clienteId),
+                
+                DireccionId: parseInt(direccionId),
+
                 MontoTotal: detallesPedido.reduce((acc, item) => acc + item.subtotal, 0),
                 Detalles: detallesPedido.map(d => ({
                     ProductoId: d.productoId,
