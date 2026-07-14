@@ -1,6 +1,18 @@
 ﻿@{
     ViewData["Title"] = "Generar Despacho";
 }
+<style>
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+</style>
+
 
 <div class="container mt-4">
     <h2>Registro de Productos Despachados</h2>
@@ -83,8 +95,6 @@
 
         selectCliente.addEventListener('change', async function () {
             const clienteId = this.value;
-
-            selectDireccion.innerHTML = '<option value="">-- Seleccione una dirección --</option>';
 
             if (!clienteId) {
                 selectDireccion.disabled = true;
@@ -185,7 +195,13 @@
                             <strong>-</strong>
                         </button>
 
-                        <span class="fw-bold px-2">${item.cantidad}</span>
+                        <input type="number"
+                               class="form-control form-control-sm text-center d-inline-block fw-bold"
+                               style="width: 70px;"
+                               min="1"
+                               value="${item.cantidad}"
+                               onchange="modificarCantidadManual(${item.productoId}, this.value)"
+                               ${pedidoConfirmado ? 'disabled' : ''} />
 
                         <button class="btn btn-sm btn-outline-secondary ms-2" onclick="sumarProducto(${item.productoId})" ${pedidoConfirmado ? 'disabled' : ''}>
                             <strong>+</strong>
@@ -206,6 +222,25 @@
             document.getElementById('lblTotalProductos').innerText = totalProductos;
             document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
         }
+
+        window.modificarCantidadManual = function(idProducto, nuevaCantidadStr) {
+            if (pedidoConfirmado) return;
+
+            let nuevaCantidad = parseInt(nuevaCantidadStr);
+            const producto = detallesPedido.find(p => p.productoId === idProducto);
+
+            if (producto) {
+                if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
+                    alert("La cantidad debe ser un número válido mayor o igual a 1.");
+                    nuevaCantidad = 1;
+                }
+
+                producto.cantidad = nuevaCantidad;
+                producto.subtotal = producto.cantidad * producto.costoUnitario;
+                actualizarTabla();
+            }
+        }
+
         window.restarProducto = function(idProducto) {
             if (pedidoConfirmado) return;
 
@@ -311,6 +346,7 @@
 
             const botonesEliminar = document.querySelectorAll('#cuerpoTabla .btn-danger');
             botonesEliminar.forEach(btn => btn.disabled = true);
+            actualizarTabla();
         }
     </script>
 }
