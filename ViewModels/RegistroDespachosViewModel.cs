@@ -6,6 +6,7 @@ namespace GestorDespacho.ViewModels
     {
         public int ClienteId { get; set; }
         public decimal MontoTotal { get; set; }
+        public int DireccionId { get; set; }
         public List<DetallePedido> Detalles { get; set; } = new List<DetallePedido>();
     }
 

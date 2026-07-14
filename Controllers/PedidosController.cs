@@ -78,6 +78,12 @@ namespace GestorDespacho.Controllers
             try
             {
                 int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+                int? direccionFinalId = null;
+
+                if (datosDelFrente.DireccionId > 0)
+                {
+                    direccionFinalId = datosDelFrente.DireccionId;
+                }
 
                 if (usuarioId == null)
                 {
@@ -90,7 +96,8 @@ namespace GestorDespacho.Controllers
                     UsuarioId = usuarioId.Value,
                     Fecha = DateTime.Now,
                     MontoTotal = datosDelFrente.MontoTotal,
-                    Confirmado = true
+                    Confirmado = true,
+                    DireccionId = direccionFinalId
                 };
 
                 _context.Pedidos.Add(nuevoPedido);
@@ -180,6 +187,8 @@ namespace GestorDespacho.Controllers
                     texto = $"{d.Calle} {d.Numero}, {d.Localidad}"
                 })
                 .ToListAsync();
+
+            direcciones.Insert(0, new { id = 0, texto = "Retira en Local" });
             return Json(direcciones);
 
         }
