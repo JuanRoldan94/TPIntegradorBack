@@ -34,12 +34,14 @@ namespace TPIntegradorBack.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("DNI")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RazonSocial")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Telefono")
@@ -181,12 +183,14 @@ namespace TPIntegradorBack.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Contrasenia")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NombreUsuario")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Role")
