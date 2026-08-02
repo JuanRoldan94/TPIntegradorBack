@@ -4,9 +4,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TPIntegradorBack.Data;
 using TPIntegradorBack.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GestorDespacho.Controllers
 {
+    [Authorize]
     public class PedidosController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -14,16 +17,6 @@ namespace GestorDespacho.Controllers
         public PedidosController(ApplicationDbContext context)
         {
             _context = context;
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var pedidos = await _context.Pedidos
-                .Include(p => p.Cliente)
-                .Include(p => p.Usuario)
-                .Include(p => p.DetallePedido)
-                .ToListAsync();
-            return View(pedidos);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -77,7 +70,13 @@ namespace GestorDespacho.Controllers
 
             try
             {
-                int? usuarioId = HttpContext.Session.GetInt32("UsuarioId");
+                int? usuarioId = null;
+                var claimUsuarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if(int.TryParse(claimUsuarioId, out int idParseado))
+                {
+                    usuarioId = idParseado;
+                }
                 int? direccionFinalId = null;
 
                 if (datosDelFrente.DireccionId > 0)
@@ -147,7 +146,7 @@ namespace GestorDespacho.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string buscarCliente, string buscarUsuario)
+        public async Task<IActionResult> Index(string buscarCliente, string buscarUsuario, int? clienteId)
         {
             var query = _context.Pedidos
                 .AsNoTracking()
@@ -156,9 +155,16 @@ namespace GestorDespacho.Controllers
                 .Include(p => p.DetallePedido)
                 .AsQueryable();
 
-            if (!string.IsNullOrEmpty(buscarCliente))
+            if (clienteId.HasValue && clienteId > 0)
             {
-                query = query.Where(p => p.Cliente.RazonSocial.Contains(buscarCliente));
+                query = query.Where(p => p.ClienteId == clienteId.Value);
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(buscarCliente))
+                {
+                    query = query.Where(p => p.Cliente.RazonSocial.Contains(buscarCliente));
+                }
             }
 
             if (!string.IsNullOrEmpty(buscarUsuario))
@@ -170,6 +176,7 @@ namespace GestorDespacho.Controllers
 
             ViewBag.FiltroCliente = buscarCliente;
             ViewBag.FiltroUsuario = buscarUsuario;
+            ViewBag.ClienteId = clienteId;
 
             return View(pedidos);
         }
@@ -181,7 +188,7 @@ namespace GestorDespacho.Controllers
             var direcciones = await _context.Direcciones
                 .AsNoTracking()
                 .Where(d => d.ClienteId == clienteId)
-                .Select(d => new
+                .Select(d => new    
                 {
                     id = d.DireccionId,
                     texto = $"{d.Calle} {d.Numero}, {d.Localidad}"

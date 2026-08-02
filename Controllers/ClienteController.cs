@@ -2,7 +2,7 @@
 using TPIntegradorBack.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using TPIntegradorBack.ViewModels;
 
 public class ClienteController : Controller
 {
@@ -12,7 +12,6 @@ public class ClienteController : Controller
     {
         _context = context;
     }
-
 
     public async Task<IActionResult> Index()
     {
@@ -46,21 +45,55 @@ public class ClienteController : Controller
 
     public IActionResult Create()
     {
-        return View();
+        return View(new ClienteYDireccionViewModel());
     }
 
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create([Bind("ClienteId,RazonSocial,DNI,Telefono,Activo")] Cliente cliente)
+    public async Task<IActionResult> Create(ClienteYDireccionViewModel model)
     {
         if (ModelState.IsValid)
         {
-            _context.Add(cliente);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            using var transaction = await _context.Database.BeginTransactionAsync();
+
+            try
+            {
+                var nuevoCliente = new Cliente
+                {
+                    RazonSocial = model.RazonSocial,
+                    DNI = model.DNI,
+                    Telefono = model.Telefono,
+                    Activo = model.Activo
+                };
+
+                _context.Clientes.Add(nuevoCliente);
+                await _context.SaveChangesAsync();
+
+                if(!string.IsNullOrWhiteSpace(model.Calle) || model.Numero != null || !string.IsNullOrWhiteSpace(model.Localidad))
+                {
+                    var nuevaDireccion = new Direccion
+                    {
+                        ClienteId = nuevoCliente.ClienteId,
+                        Calle = model.Calle,
+                        Numero = model.Numero,
+                        Localidad = model.Localidad
+                    };
+                    _context.Direcciones.Add(nuevaDireccion);
+                    await _context.SaveChangesAsync();
+                }
+
+                await transaction.CommitAsync();
+
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                await transaction.RollbackAsync();
+                ModelState.AddModelError("", "Ocurrió un error grave al intentar guardar el cliente y su dirección.");
+            }
         }
-        return View(cliente);
+        return View(model);
     }
 
     public async Task<IActionResult> Edit(int? id)
