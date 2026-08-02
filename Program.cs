@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using TPIntegradorBack.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace TPIntegradorBack
 {
@@ -12,19 +12,18 @@ namespace TPIntegradorBack
             builder.Services.AddDbContext<Data.ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             // Add services to the container.
-            builder.Services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add<TPIntegradorBack.Filters.AuthFilter>();
-            });
+            builder.Services.AddControllersWithViews();
 
-            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Login/Index";
+                    options.LogoutPath = "/Login/Logout";
+                    options.AccessDeniedPath = "/Login/AccesoDenegado";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                });
 
-            builder.Services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromMinutes(30);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+            builder.Services.AddAuthorization();
 
             var app = builder.Build();
 
@@ -33,19 +32,16 @@ namespace TPIntegradorBack
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
             app.UseRouting();
 
-            // Session ANTES de Authorization
-            app.UseSession();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();
-            //app.MapControllerRoute(
-            //    name: "default",
-            //    pattern: "{controller=Home}/{action=Index}/{id?}")
-            //    .WithStaticAssets();
-
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Login}/{action=Index}/{id?}")

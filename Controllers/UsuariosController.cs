@@ -2,9 +2,9 @@
 using TPIntegradorBack.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
-
-
+[Authorize]
 public class UsuariosController : Controller
 {
     private readonly ApplicationDbContext _context;
@@ -13,7 +13,6 @@ public class UsuariosController : Controller
     {
         _context = context;
     }
-
 
     public async Task<IActionResult> Index()
     {
@@ -55,6 +54,10 @@ public class UsuariosController : Controller
     {
         if (ModelState.IsValid)
         {
+            if (!string.IsNullOrEmpty(usuario.Contrasenia))
+            {
+                usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia);
+            }
             _context.Add(usuario);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
