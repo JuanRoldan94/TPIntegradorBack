@@ -69,7 +69,7 @@
                     <p class="mb-1"><strong>Total de productos cargados:</strong> <span id="lblTotalProductos">0</span></p>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <h4 class="mb-3">Monto total de la venta: $<span id="lblMontoTotal">0.00</span></h4>
+                    <h4 class="mb-3">Monto total de la venta: <span id="lblMontoTotal">0.00</span></h4>
                     <button id="btnConfirmarPedido" class="btn btn-success btn-lg">Confirmar Pedido</button>
                 </div>
             </div>
@@ -208,8 +208,8 @@
                         </button>
                     </td>
                     <td class="align-middle">${item.descripcion}</td>
-                    <td class="align-middle">$${item.costoUnitario.toFixed(2)}</td>
-                    <td class="align-middle">$${item.subtotal.toFixed(2)}</td>
+                    <td class="align-middle">${conversorMoneda(item.costoUnitario)}</td>
+                    <td class="align-middle">${conversorMoneda(item.subtotal)}</td>
                     <td class="align-middle">
                         <button class="btn btn-danger btn-sm" onclick="eliminarProducto(${item.productoId})" ${pedidoConfirmado ? 'disabled' : ''}>
                             Eliminar Fila
@@ -220,7 +220,7 @@
             });
 
             document.getElementById('lblTotalProductos').innerText = totalProductos;
-            document.getElementById('lblMontoTotal').innerText = montoTotal.toFixed(2);
+            document.getElementById('lblMontoTotal').innerText = conversorMoneda(montoTotal);
         }
 
         window.modificarCantidadManual = function(idProducto, nuevaCantidadStr) {
@@ -347,6 +347,10 @@
             const botonesEliminar = document.querySelectorAll('#cuerpoTabla .btn-danger');
             botonesEliminar.forEach(btn => btn.disabled = true);
             actualizarTabla();
+        }
+
+        function conversorMoneda(valor){
+            return valor.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
         }
     </script>
 }

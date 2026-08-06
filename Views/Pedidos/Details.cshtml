@@ -5,7 +5,7 @@
 }
 
 <div class="container mt-4">
-    <h2>Detalle del Pedido #@Model.PedidoId</h2>
+    <h2>Detalle del Pedido @* #@Model.PedidoId *@</h2>
     <hr />
 
     <div class="row mb-3">
@@ -83,14 +83,18 @@
                 tr.innerHTML = `
                     <td>${item.cantidad}</td>
                     <td>${item.descripcion}</td>
-                    <td>$${item.costoUnitario.toFixed(2)}</td>
-                    <td>$${item.subtotal.toFixed(2)}</td>
+                    <td>${conversorMoneda(item.costoUnitario)}</td>
+                    <td>${conversorMoneda(item.subtotal)}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
             document.getElementById('lblTotalProductos').innerText = totalProductos;
             document.getElementById('lblMontoTotal').innerText = montoTotal.toLocaleString('es-AR', { style: 'currency', currency: 'ARS', currencyDisplay: 'narrowSymbol' });
+        }
+
+        function conversorMoneda(valor) {
+            return valor.toLocaleString('es-AR', { style: 'currency', currency: 'ARS' });
         }
     </script>
 }

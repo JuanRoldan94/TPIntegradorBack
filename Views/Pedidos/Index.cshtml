@@ -51,7 +51,7 @@
                 <td>@item.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
                 <td>@item.Cliente?.RazonSocial</td>
                 <td>@item.Usuario?.NombreUsuario</td>
-                <td>$@item.MontoTotal.ToString("0.00")</td>
+                <td>$@item.MontoTotal.ToString("N2")</td>
                 <td>@item.DetallePedido?.Sum(d => d.Cantidad)</td>
                 <td>@(item.Confirmado ? "Sí" : "No")</td>
                 <td>
@@ -60,4 +60,5 @@
             </tr>
         }
     </tbody>
+
 </table>
