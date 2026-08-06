@@ -52,10 +52,13 @@
                 </a>
 
             }
-            else
-            {
-                <span class="text-muted">Este cliente no tiene direcciones registradas</span>
-            }
+
+            <a class="btn btn-outline-success"
+                asp-controller="Direccion"
+                asp-action="Create"
+                asp-route-clienteId="@Model.ClienteId">
+                Agregar Dirección
+            </a>
         </dd>
         <dt class="col-sm-2">
             Pedidos

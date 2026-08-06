@@ -91,12 +91,25 @@ public class UsuariosController : Controller
 
         if (ModelState.IsValid)
         {
+
             try
             {
+                var usuarioOriginal = await _context.Usuarios.AsNoTracking().FirstOrDefaultAsync(u => u.UsuarioId == id);
+
+                if (usuarioOriginal == null) return NotFound();
+
+                if(!string.IsNullOrEmpty(usuario.Contrasenia) && !usuario.Contrasenia.StartsWith("$"))
+                {
+                    usuario.Contrasenia = BCrypt.Net.BCrypt.HashPassword(usuario.Contrasenia);
+                }
+                else if (string.IsNullOrEmpty(usuario.Contrasenia))
+                {
+                    usuario.Contrasenia = usuarioOriginal.Contrasenia;
+                }
+
                 _context.Update(usuario);
                 await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
+            }catch (DbUpdateConcurrencyException)
             {
                 if (!UsuarioExists(usuario.UsuarioId))
                 {
