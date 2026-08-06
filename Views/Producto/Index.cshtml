@@ -34,7 +34,7 @@
                 @Html.DisplayFor(model => item.Descripcion)
             </td>
             <td>
-                @Html.DisplayFor(model => item.PrecioUnitario)
+                @item.PrecioUnitario?.ToString("N2")
             </td>
             <td>
                 @Html.DisplayFor(model => item.Stock)
