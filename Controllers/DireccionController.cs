@@ -17,6 +17,8 @@ public class DireccionController : Controller
     // GET: DIRECCIONS
     public async Task<IActionResult> Index(int? clienteId)    
     {
+        ViewBag.ClienteId = clienteId;
+
         var query = _context.Direcciones
             .Include(d => d.Cliente)
             .AsQueryable();
@@ -48,10 +50,10 @@ public class DireccionController : Controller
     }
 
     // GET: DIRECCIONS/Create
-    public async Task<IActionResult> Create()
+    public async Task<IActionResult> Create(int? clienteId)
     {
         var clientes = await _context.Clientes.Where(c => c.Activo).ToListAsync();
-        ViewBag.Clientes = new SelectList(clientes, "ClienteId", "RazonSocial");
+        ViewBag.Clientes = new SelectList(clientes, "ClienteId", "RazonSocial", clienteId);
         return View();
     }
 
